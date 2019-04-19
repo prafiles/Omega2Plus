@@ -12,6 +12,6 @@ oled-exp dim on
 expled 00EF00
 oled-exp cursor 0,0 write "`date +\"%d-%m-%y %H:%M:%S\"`"
 oled-exp cursor 1,0 write "$ip"
-sleep 5
+sleep 1
 #Cleanup
 expled 000000
