@@ -63,12 +63,12 @@ while True:
     text_cols = text.split()
     rx_bytes_new = int (text_cols[1])
     tx_bytes_new = int (text_cols[9])
-    rx_kilobyte_rate = int ((rx_bytes_new - rx_bytes) / ((timestamp_new - timestamp) * 1000))
-    tx_kilobyte_rate = int ((tx_bytes_new - tx_bytes) / ((timestamp_new - timestamp) * 1000))
+    rx_kilobyte_rate = int ((rx_bytes_new - rx_bytes)*8 / ((timestamp_new - timestamp) * 1000))
+    tx_kilobyte_rate = int ((tx_bytes_new - tx_bytes)*8 / ((timestamp_new - timestamp) * 1000))
     rx_bytes = rx_bytes_new
     tx_bytes = tx_bytes_new
     timestamp = timestamp_new
     oledExp.setCursor(2,0)
-    oledExp.write("Rx " + str (rx_kilobyte_rate) + " KB/s")
+    oledExp.write("Rx " + str (rx_kilobyte_rate/1000) + " Mb/s")
     oledExp.setCursor(3,0)
-    oledExp.write("Tx " + str (tx_kilobyte_rate) + " KB/s")
+    oledExp.write("Tx " + str (tx_kilobyte_rate/1000) + " Mb/s")
