@@ -34,6 +34,7 @@ def color_blink(r,g,b,duration=0.25,sleep=0.25):
 while True:
     time.sleep(5)
     oledExp.clear()
+    time.sleep(10)
     #DNS Try
     oledExp.setCursor(0,0)
     try:
