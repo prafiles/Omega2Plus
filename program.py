@@ -99,6 +99,6 @@ while True:
     readings = get_interface_val('ppp0')
     oledExp.setCursor(2,0)
     oledExp.write("WAN Mbps Rx " + str (readings['rx_rate']) + " Tx " + str (readings['tx_rate']))
-    readings = get_interface_val('br0')
+    readings = get_interface_val('eth0')
     oledExp.setCursor(3,0)
-    oledExp.write("ALL Mbps Rx " + str (readings['rx_rate']) + " Tx " + str (readings['tx_rate']))
+    oledExp.write("ETH Mbps Rx " + str (readings['rx_rate']) + " Tx " + str (readings['tx_rate']))
