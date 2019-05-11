@@ -98,6 +98,6 @@ while True:
     color_blink(0,1,0) #Internet Good
     readings = get_interface_val('ppp0')
     oledExp.setCursor(2,0)
-    oledExp.write("Rx " + str (readings['rx']) + " Mb/s")
+    oledExp.write("Rx " + str (readings['rx_rate']) + " Mb/s")
     oledExp.setCursor(3,0)
-    oledExp.write("Tx " + str (readings['tx']) + " Mb/s")
+    oledExp.write("Tx " + str (readings['tx_rate']) + " Mb/s")
