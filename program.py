@@ -77,7 +77,7 @@ while True:
     oledExp.setCursor(0,0)
     try:
         res = resolver.Resolver()
-        res.nameservers = ['10.0.0.3']
+        res.nameservers = ['10.0.0.4']
         answers = res.query('stackexchange.com', lifetime=5)
         oledExp.write("DNS Good")
     except:
