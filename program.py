@@ -1,10 +1,12 @@
-import os
 import time
-import socket
 import onionGpio
 from OmegaExpansion import oledExp
 from requests import get
 from dns import resolver
+
+oledExp.driverInit(1)
+oledExp.setBrightness(0)
+oledExp.setTextColumns()
 
 gpio_rled = onionGpio.OnionGpio(17)
 gpio_gled = onionGpio.OnionGpio(16)
@@ -13,10 +15,6 @@ gpio_rled.setOutputDirection(0)
 gpio_gled.setOutputDirection(0)
 gpio_bled.setOutputDirection(0)
 time.sleep(0.25) #Blink white 1 second to confirm LED function
-oledExp.driverInit(1)
-oledExp.setBrightness(0)
-oledExp.setTextColumns()
-
 
 def color_blink(r,g,b,duration=0.25,sleep=0.25):
     #LED GPIO 1 means LOW and 0 means HIGH
@@ -29,76 +27,55 @@ def color_blink(r,g,b,duration=0.25,sleep=0.25):
     gpio_bled.setValue(1)
     time.sleep(sleep)
 
+def blink_start():
+    color_blink(0,0,1)
+    
+def blink_error():
+    color_blink(1,0,0)
+    color_blink(1,0,0)
+    
+def blink_success():
+    color_blink(0,1,0)
 
-interface_readings_dict={}
+def check_website(url, name, line) :
+    oledExp.setCursor(line,0)
+    try:
+        get(url).text
+        oledExp.write(name + " Good")
+        blink_success() #All Good
+    except:
+        oledExp.write(name + " Bad")
+        print ("HTTP Request Failed")
+        blink_error()
 
-def get_interface_last_val(interface):
-    global interface_readings_dict
-    interface_readings = interface_readings_dict.get(interface, None)
-    if interface_readings is None:
-        interface_readings = {
-            'rx' : 0,
-            'tx' : 0,
-            'time' : time.time()
-        }
-        interface_readings_dict[interface] = interface_readings
-    return interface_readings
-
-def set_interface_value(interface, rx, tx, timestamp):
-    global interface_readings_dict
-    interface_readings_dict[interface] = {
-        'rx':rx,
-        'tx':tx,
-        'time': timestamp
-    }
-
-
-def get_interface_val(interface):
-    last_readings = get_interface_last_val(interface)
-    text = get('https://10.0.0.1/fetchif.cgi?' + interface, verify=False, auth=(os.environ['USER'],os.environ['PASSWORD'])).text.split('\n')[1]
-    text_cols = text.split()
-    rx_bytes_new = int (text_cols[1])
-    tx_bytes_new = int (text_cols[9])
-    timestamp_new = time.time()
-    set_interface_value(interface, rx_bytes_new, tx_bytes_new, timestamp_new)
-    rx_kilobyte_rate = int ((rx_bytes_new - last_readings['rx'])*8 / ((timestamp_new - last_readings['time']) * 1000))
-    tx_kilobyte_rate = int ((tx_bytes_new - last_readings['tx'])*8 / ((timestamp_new - last_readings['time']) * 1000))
-    return {
-        'rx_rate':rx_kilobyte_rate / 1000,
-        'tx_rate':tx_kilobyte_rate / 1000
-    }
 
 
 while True:
-    time.sleep(5)
+    time.sleep(15)
+    blink_start()
     oledExp.clear()
-    time.sleep(10)
     #DNS Try
     oledExp.setCursor(0,0)
     try:
         res = resolver.Resolver()
-        res.nameservers = ['10.0.0.4']
-        answers = res.query('stackexchange.com', lifetime=5)
+        res.nameservers = ['10.0.0.10']
+        answers = res.query('prakharshukla.com', lifetime=5)
         oledExp.write("DNS Good")
     except:
         oledExp.write("DNS Bad")
         color_blink(1,0,0)
         continue
+
     #Internet HTTP Try
-    oledExp.setCursor(1,0)
-    try:
-        ip = get('https://api.ipify.org').text
-        oledExp.write("Internet Good")
-    except:
-        oledExp.write("Internet Bad")
-        print ("HTTP Request Failed")
-        color_blink(1,0,0)
-        color_blink(1,0,0)
-        continue
-    color_blink(0,1,0) #Internet Good
-    readings = get_interface_val('ppp0')
-    oledExp.setCursor(2,0)
-    oledExp.write("WAN Mbps Rx " + str (readings['rx_rate']) + " Tx " + str (readings['tx_rate']))
-    readings = get_interface_val('eth0')
-    oledExp.setCursor(3,0)
-    oledExp.write("ETH Mbps Rx " + str (readings['rx_rate']) + " Tx " + str (readings['tx_rate']))
+    check_website('https://grafana.prakharshukla.com',"PrakharShukla.com",1)
+    check_website('https://nl-dev.solulever.com',"NL-Dev",2)
+    check_website('https://dev.solulever.com',"E2E",3)
+    check_website('https://aalborg.solulever.com',"Aalborg",4)
+    check_website('https://ep.solulever.com',"EP",5)
+
+    #readings = get_interface_val('ppp0')
+    #oledExp.setCursor(2,0)
+    #oledExp.write("WAN Mbps Rx " + str (readings['rx_rate']) + " Tx " + str (readings['tx_rate']))
+    #readings = get_interface_val('eth0')
+    #oledExp.setCursor(3,0)
+    #oledExp.write("ETH Mbps Rx " + str (readings['rx_rate']) + " Tx " + str (readings['tx_rate']))
