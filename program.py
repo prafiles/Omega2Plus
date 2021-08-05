@@ -41,10 +41,10 @@ def check_website(url, name, line) :
     oledExp.setCursor(line,0)
     try:
         get(url).text
-        oledExp.write(name + " Good")
+        oledExp.write(name + " OK")
         blink_success() #All Good
     except:
-        oledExp.write(name + " Bad")
+        oledExp.write(name + " BAD")
         print ("HTTP Request Failed")
         blink_error()
 
