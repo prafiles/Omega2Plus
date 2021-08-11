@@ -40,7 +40,7 @@ def blink_success():
 def check_website(url, name, line) :
     oledExp.setCursor(line,0)
     try:
-        get(url).text
+        get(url,timeout=5).text
         oledExp.write(name + " OK")
         blink_success() #All Good
     except:
