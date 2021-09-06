@@ -67,7 +67,7 @@ while True:
         continue
 
     #Internet HTTP Try
-    check_website('https://grafana.prakharshukla.com',"PrakharShukla.com",1)
+    check_website('https://prafiles.in',"Personal",1)
     check_website('https://nl-dev.solulever.com',"NL-Dev",2)
     check_website('https://dev.solulever.com',"E2E",3)
     check_website('https://aalborg.solulever.com',"Aalborg",4)
