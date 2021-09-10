@@ -59,7 +59,7 @@ while True:
     try:
         res = resolver.Resolver()
         res.nameservers = ['10.0.0.10']
-        answers = res.query('prakharshukla.com', lifetime=5)
+        answers = res.query('prafiles.in', lifetime=5)
         oledExp.write("DNS Good")
     except:
         oledExp.write("DNS Bad")
@@ -67,7 +67,7 @@ while True:
         continue
 
     #Internet HTTP Try
-    check_website('https://grafana.prakharshukla.com',"PrakharShukla.com",1)
+    check_website('https://grafana.prafiles.in',"Personal",1)
     check_website('https://nl-dev.solulever.com',"NL-Dev",2)
     check_website('https://dev.solulever.com',"E2E",3)
     check_website('https://aalborg.solulever.com',"Aalborg",4)
