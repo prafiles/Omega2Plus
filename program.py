@@ -51,7 +51,7 @@ def check_website(url, name, line) :
 
 
 while True:
-    time.sleep(15)
+    time.sleep(300)
     blink_start()
     oledExp.clear()
     #DNS Try
