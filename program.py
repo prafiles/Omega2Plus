@@ -16,43 +16,55 @@ gpio_gled.setOutputDirection(0)
 gpio_bled.setOutputDirection(0)
 time.sleep(0.25) #Blink white 1 second to confirm LED function
 
+flag_global_error = False
+
 def color_blink(r,g,b,duration=0.25,sleep=0.25):
     #LED GPIO 1 means LOW and 0 means HIGH
     gpio_rled.setValue(1-r)
     gpio_gled.setValue(1-g)
     gpio_bled.setValue(1-b)
     time.sleep(duration)
-    gpio_rled.setValue(1)
-    gpio_gled.setValue(1)
-    gpio_bled.setValue(1)
-    time.sleep(sleep)
+    if duration > 0: 
+        gpio_rled.setValue(1)
+        gpio_gled.setValue(1)
+        gpio_bled.setValue(1)
+        time.sleep(sleep)
 
-def blink_start():
+def led_start():
     color_blink(0,0,1)
     
-def blink_error():
-    color_blink(1,0,0)
-    color_blink(1,0,0)
+def led_error(blink=True):
+    global flag_global_error
+    flag_global_error = True
     
-def blink_success():
-    color_blink(0,1,0)
+    color_blink(1,0,0)
+    color_blink(1,0,0)
 
-def check_website(url, name, line) :
+    if blink == False:
+        color_blink(1,0,0,duration=-1)
+    
+
+def led_success(blink=True):
+    color_blink(0,1,0)
+    if blink == False:
+        color_blink(0,1,0,duration=-1)
+
+
+def check_website(url, name, line):
     oledExp.setCursor(line,0)
     try:
         get(url,timeout=5).text
         oledExp.write(name + " OK")
-        blink_success() #All Good
+        led_success() #All Good
     except:
         oledExp.write(name + " BAD")
         print ("HTTP Request Failed")
-        blink_error()
-
+        led_error()
 
 
 while True:
     time.sleep(300)
-    blink_start()
+    led_start()
     oledExp.clear()
     #DNS Try
     oledExp.setCursor(0,0)
@@ -63,7 +75,7 @@ while True:
         oledExp.write("DNS Good")
     except:
         oledExp.write("DNS Bad")
-        color_blink(1,0,0)
+        led_error()
         continue
 
     #Internet HTTP Try
@@ -72,6 +84,11 @@ while True:
     check_website('https://dev.solulever.com',"E2E",3)
     check_website('https://aalborg.solulever.com',"Aalborg",4)
     check_website('https://ep.solulever.com',"EP",5)
+
+    if flag_global_error:
+        led_error(blink=False)
+    else:
+        led_success(blink=False)
 
     #readings = get_interface_val('ppp0')
     #oledExp.setCursor(2,0)
