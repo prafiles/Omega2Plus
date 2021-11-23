@@ -72,7 +72,7 @@ while True:
     oledExp.setCursor(0,0)
     try:
         res = resolver.Resolver()
-        res.nameservers = ['10.0.0.10']
+        res.nameservers = ['10.0.0.3']
         answers = res.query('prafiles.in', lifetime=5)
         oledExp.write("DNS Good")
     except:
