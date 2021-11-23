@@ -31,6 +31,8 @@ def color_blink(r,g,b,duration=0.25,sleep=0.25):
         time.sleep(sleep)
 
 def led_start():
+    global flag_global_error
+    flag_global_error = False
     color_blink(0,0,1)
     
 def led_error(blink=True):
