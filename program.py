@@ -24,8 +24,8 @@ def color_blink(r,g,b,duration=0.25,sleep=0.25):
     gpio_rled.setValue(1-r)
     gpio_gled.setValue(1-g)
     gpio_bled.setValue(1-b)
-    time.sleep(duration)
     if duration > 0: 
+        time.sleep(duration)
         gpio_rled.setValue(1)
         gpio_gled.setValue(1)
         gpio_bled.setValue(1)
