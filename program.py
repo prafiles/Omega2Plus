@@ -89,7 +89,7 @@ while True:
 
     #Internet HTTP Try
     check_website('https://monitor.prafiles.in',"Personal",2)
-    check_website('https://nl-dev.solulever.com',"NL-Dev",3)
+    check_website('https://brabo-platform.nl-dev.solulever.com/',"NL-Dev",3)
     check_website('https://dev.solulever.com',"E2E",4)
     check_website('https://ep.solulever.com',"EP",5)
     check_website('https://lightscameraazadi.in',"LCA",6)
