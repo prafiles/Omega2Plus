@@ -3,6 +3,7 @@ import onionGpio
 from OmegaExpansion import oledExp
 from requests import get
 from dns import resolver
+from datetime import datetime
 
 oledExp.driverInit(1)
 oledExp.setBrightness(0)
@@ -64,12 +65,18 @@ def check_website(url, name, line):
         led_error()
 
 
-while True:
-    time.sleep(300)
+while True:    
     led_start()
     oledExp.clear()
-    #DNS Try
+
+    time.sleep(300)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
     oledExp.setCursor(0,0)
+    oledExp.write(current_time)
+
+    #DNS Try
+    oledExp.setCursor(1,0)
     try:
         res = resolver.Resolver()
         res.nameservers = ['10.0.0.3']
@@ -81,11 +88,11 @@ while True:
         continue
 
     #Internet HTTP Try
-    check_website('https://grafana.prafiles.in',"Personal",1)
-    check_website('https://nl-dev.solulever.com',"NL-Dev",2)
-    check_website('https://dev.solulever.com',"E2E",3)
-    check_website('https://aalborg.solulever.com',"Aalborg",4)
-    check_website('https://ep.solulever.com',"EP",5)
+    check_website('https://grafana.prafiles.in',"Personal",2)
+    check_website('https://nl-dev.solulever.com',"NL-Dev",3)
+    check_website('https://dev.solulever.com',"E2E",4)
+    check_website('https://aalborg.solulever.com',"Aalborg",5)
+    check_website('https://ep.solulever.com',"EP",6)
 
     if flag_global_error:
         led_error(blink=False)
