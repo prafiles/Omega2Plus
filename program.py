@@ -67,9 +67,7 @@ def check_website(url, name, line):
 
 while True:    
     led_start()
-    oledExp.clear()
-
-    time.sleep(300)
+    
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     oledExp.setCursor(0,0)
@@ -98,6 +96,11 @@ while True:
         led_error(blink=False)
     else:
         led_success(blink=False)
+
+    time.sleep(10)
+    oledExp.clear()
+    time.sleep(50)
+
 
     #readings = get_interface_val('ppp0')
     #oledExp.setCursor(2,0)
